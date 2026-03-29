@@ -3,7 +3,7 @@
  * Run: npm run auth
  *
  * Prerequisites:
- * - Copy gmail_credentials.json from todoist-python/local_data/ into local_data/
+ * - Download OAuth2 credentials from Google Cloud Console into local_data/gmail_credentials.json
  */
 import { google } from 'googleapis'
 import fs from 'fs/promises'
@@ -27,7 +27,7 @@ async function main() {
   if (!credRaw) {
     console.error('❌ gmail_credentials.json not found in local_data/')
     console.error(
-      '   Copy it from: todoist-python/local_data/gmail_credentials.json'
+      '   Download it from Google Cloud Console and save to local_data/'
     )
     process.exit(1)
   }

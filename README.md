@@ -1,6 +1,6 @@
 # Email Inbox
 
-Personal email triage app. Fetches unread emails from Gmail, uses Claude AI to classify them as action items or digest, and surfaces them in a clean UI. Supports delete, archive, bulk actions, and inline email preview.
+Personal email triage app. Fetches unread emails from Gmail, uses Claude AI to classify them into three tiers — action needed, in the loop (digest), and noise — and surfaces them in a clean UI. Supports delete, archive, bulk actions, and inline email preview.
 
 ## Setup
 
@@ -8,7 +8,7 @@ Personal email triage app. Fetches unread emails from Gmail, uses Claude AI to c
 
 - Node.js 18+
 - Gmail credentials JSON from [Google Cloud Console](https://console.cloud.google.com/) (OAuth2 credentials for a Desktop app with Gmail API enabled)
-- Anthropic API key
+- Anthropic API key ([console.anthropic.com](https://console.anthropic.com/))
 
 ### First time
 
@@ -24,7 +24,7 @@ Personal email triage app. Fetches unread emails from Gmail, uses Claude AI to c
    ANTHROPIC_API_KEY=your_key_here
    ```
 
-   The Express server defaults to port `3006`. If you change it, also update the proxy in `vite.config.ts`.
+   The Express server defaults to port `3006`. To change it, set `PORT` in `.env` and update the proxy in `vite.config.ts`.
 
 3. **Add Gmail credentials**
 
@@ -41,17 +41,11 @@ Personal email triage app. Fetches unread emails from Gmail, uses Claude AI to c
 
 5. **Start**
 
-   For local development:
    ```bash
    npm run dev
    ```
-   Vite runs on `:5173`, Express on `:3006` (default).
 
-   For production (requires [pm2](https://pm2.keyv.io/)):
-   ```bash
-   npm run build
-   pm2 start ecosystem.config.js --only email-inbox
-   ```
+   Vite runs on `:5173`, Express on `:3006` (default).
 
 ## Development
 
@@ -61,24 +55,35 @@ npm run dev
 
 Vite runs on `:5173`, Express on `:3006` (default). Hot reload is enabled for both frontend and backend.
 
+### Production
+
+Requires [pm2](https://pm2.keymetrics.io/). Build the frontend and run the server directly:
+
+```bash
+npm run build
+PORT=3006 NODE_ENV=production pm2 start npm --name email-inbox -- start
+```
+
+Or use your own `ecosystem.config.js`.
+
 ## Scripts
 
-| Command               | Description                        |
-| --------------------- | ---------------------------------- |
-| `npm run dev`         | Start dev servers (Vite + nodemon) |
-| `npm run build`       | Production build                   |
-| `npm run restart:pm2` | Build and restart via pm2 (production) |
-| `npm run auth`        | Re-authenticate Gmail              |
-| `npm run check`       | Lint + format check + type check   |
-| `npm run security`    | npm audit                          |
+| Command             | Description                        |
+| ------------------- | ---------------------------------- |
+| `npm run dev`       | Start dev servers (Vite + nodemon) |
+| `npm run build`     | Production build                   |
+| `npm start`         | Start Express server               |
+| `npm run auth`      | Authenticate or re-authenticate Gmail |
+| `npm run check`     | Lint + format check + type check   |
+| `npm run security`  | npm audit                          |
 
 ## Data & Privacy
 
-- Email data is stored locally in `local_data/processed_emails.json` — gitignored, never committed
-- Gmail OAuth credentials and tokens live in `local_data/` — also gitignored
-- No email content is sent anywhere except to the Anthropic API for triage (subject + body preview only)
+- Email data is stored locally in `local_data/` — gitignored, never committed
+- Gmail OAuth credentials and tokens also live in `local_data/`
+- Email metadata (sender, subject, date, and a body preview) is sent to the Anthropic API for triage classification — nothing else
 - Actions (delete, archive) are performed directly via the Gmail API — no third-party services involved
 
 ## Notes
 
-This is a personal productivity tool built for my own use. The code is public but this is not an open-source project accepting contributions — it's built around my specific email workflow and Gmail setup. Feel free to fork and adapt it for your own needs.
+This is a personal productivity tool built for my own use. The code is public but this is not an open-source project accepting contributions — it's built around my specific email workflow and Gmail setup. Feel free to fork and adapt for your own needs.
