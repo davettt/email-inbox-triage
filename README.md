@@ -22,13 +22,16 @@ Personal email triage app. Fetches unread emails from Gmail, uses Claude AI to c
 
    ```
    ANTHROPIC_API_KEY=your_key_here
-   PORT=3006
-   NODE_ENV=production
    ```
+
+   The Express server defaults to port `3006`. If you change it, also update the proxy in `vite.config.ts`.
 
 3. **Add Gmail credentials**
 
-   Download your OAuth2 credentials JSON from Google Cloud Console and save it to `local_data/gmail_credentials.json`.
+   In [Google Cloud Console](https://console.cloud.google.com/):
+   - Create a project and enable the **Gmail API**
+   - Create OAuth2 credentials for a **Desktop app**
+   - Download the credentials JSON and save it to `local_data/gmail_credentials.json`
 
 4. **Authenticate Gmail** (one-time, opens browser)
 
@@ -36,7 +39,15 @@ Personal email triage app. Fetches unread emails from Gmail, uses Claude AI to c
    npm run auth
    ```
 
-5. **Build and start**
+5. **Start**
+
+   For local development:
+   ```bash
+   npm run dev
+   ```
+   Vite runs on `:5173`, Express on `:3006` (default).
+
+   For production (requires [pm2](https://pm2.keyv.io/)):
    ```bash
    npm run build
    pm2 start ecosystem.config.js --only email-inbox
@@ -48,7 +59,7 @@ Personal email triage app. Fetches unread emails from Gmail, uses Claude AI to c
 npm run dev
 ```
 
-Vite runs on `:5173`, Express on `:3006`.
+Vite runs on `:5173`, Express on `:3006` (default). Hot reload is enabled for both frontend and backend.
 
 ## Scripts
 
@@ -56,7 +67,7 @@ Vite runs on `:5173`, Express on `:3006`.
 | --------------------- | ---------------------------------- |
 | `npm run dev`         | Start dev servers (Vite + nodemon) |
 | `npm run build`       | Production build                   |
-| `npm run restart:pm2` | Build and restart via pm2          |
+| `npm run restart:pm2` | Build and restart via pm2 (production) |
 | `npm run auth`        | Re-authenticate Gmail              |
 | `npm run check`       | Lint + format check + type check   |
 | `npm run security`    | npm audit                          |
