@@ -7,7 +7,7 @@ Personal email triage app. Fetches unread emails from Gmail, uses Claude AI to c
 ### Prerequisites
 
 - Node.js 18+
-- Gmail credentials JSON (from Google Cloud Console or copy from `todoist-python/local_data/gmail_credentials.json`)
+- Gmail credentials JSON from [Google Cloud Console](https://console.cloud.google.com/) (OAuth2 credentials for a Desktop app with Gmail API enabled)
 - Anthropic API key
 
 ### First time
@@ -26,11 +26,9 @@ Personal email triage app. Fetches unread emails from Gmail, uses Claude AI to c
    NODE_ENV=production
    ```
 
-3. **Copy Gmail credentials**
+3. **Add Gmail credentials**
 
-   ```bash
-   cp ../todoist-python/local_data/gmail_credentials.json local_data/
-   ```
+   Download your OAuth2 credentials JSON from Google Cloud Console and save it to `local_data/gmail_credentials.json`.
 
 4. **Authenticate Gmail** (one-time, opens browser)
 
@@ -62,3 +60,14 @@ Vite runs on `:5173`, Express on `:3006`.
 | `npm run auth`        | Re-authenticate Gmail              |
 | `npm run check`       | Lint + format check + type check   |
 | `npm run security`    | npm audit                          |
+
+## Data & Privacy
+
+- Email data is stored locally in `local_data/processed_emails.json` — gitignored, never committed
+- Gmail OAuth credentials and tokens live in `local_data/` — also gitignored
+- No email content is sent anywhere except to the Anthropic API for triage (subject + body preview only)
+- Actions (delete, archive) are performed directly via the Gmail API — no third-party services involved
+
+## Notes
+
+This is a personal productivity tool built for my own use. The code is public but this is not an open-source project accepting contributions — it's built around my specific email workflow and Gmail setup. Feel free to fork and adapt it for your own needs.
