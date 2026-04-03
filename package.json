@@ -1,7 +1,7 @@
 {
   "name": "email-inbox",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "npm run kill-port && concurrently --kill-others-on-fail \"vite\" \"nodemon --ignore local_data/ server/index.js\"",

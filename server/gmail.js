@@ -60,6 +60,26 @@ function decodeBody(data) {
   return Buffer.from(data, 'base64url').toString('utf-8')
 }
 
+function stripHtml(text) {
+  if (!text) return ''
+  return text
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<!doctype[^>]*>/gi, '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/(?:p|div|tr|li|h[1-6])>/gi, '\n')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&#\d+;/g, '')
+    .replace(/[^\S\n]+/g, ' ')
+    .replace(/\n\s*/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+}
+
 function extractBody(payload) {
   if (!payload) return ''
 
@@ -80,10 +100,10 @@ function extractBody(payload) {
         if (nested) plainText += nested
       }
     }
-    return plainText || htmlText
+    return plainText || stripHtml(htmlText)
   }
 
-  return decodeBody(payload.body?.data)
+  return stripHtml(decodeBody(payload.body?.data))
 }
 
 function extractSenderInfo(fromHeader) {
@@ -126,6 +146,24 @@ function extractOriginalSender(body) {
   return null
 }
 
+function extractForwardedVia(body, toHeader) {
+  if (!body) return toHeader
+
+  // "Automatically forwarded by: mail@davidtiong.com.au"
+  const autoFwd = body.match(
+    /Automatically forwarded by:?\s*([^\s\n]+@[^\s\n]+)/i
+  )
+  if (autoFwd?.[1]) return autoFwd[1].trim()
+
+  // Original "To:" inside the forwarded message body
+  const origTo = body.match(
+    /(?:-+\s*original message\s*-+|Begin forwarded message:|-+\s*Forwarded message\s*-+)[\s\S]*?To:\s*(?:[^<\n]*<)?([^>\s\n]+@[^>\s\n]+)/i
+  )
+  if (origTo?.[1]) return origTo[1].trim()
+
+  return toHeader
+}
+
 export async function fetchUnreadEmails(maxResults = 50) {
   const auth = await getOAuth2Client()
   const gmail = google.gmail({ version: 'v1', auth })
@@ -154,6 +192,9 @@ export async function fetchUnreadEmails(maxResults = 50) {
 
       const body = extractBody(detail.data.payload ?? {})
       const from = extractSenderInfo(headers['from'] ?? '')
+      const toHeader = headers['to'] ?? ''
+      const forwardedVia = extractForwardedVia(body, toHeader)
+      const to = forwardedVia ? extractSenderInfo(forwardedVia) : null
       const originalFrom = extractOriginalSender(body)
       const unsubscribeUrl = extractUnsubscribeUrl(
         headers['list-unsubscribe'] ?? ''
@@ -162,6 +203,7 @@ export async function fetchUnreadEmails(maxResults = 50) {
       emails.push({
         id: msg.id,
         from,
+        to: to.email ? to : null,
         originalFrom:
           originalFrom && originalFrom.email !== from.email
             ? originalFrom

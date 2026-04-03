@@ -21,7 +21,9 @@ export default function EmailCard({
   const [expanded, setExpanded] = useState(false)
 
   const sender = email.originalFrom ?? email.from
-  const isForwarded = email.originalFrom != null
+  const showVia =
+    email.to?.email != null &&
+    email.to.email.toLowerCase() !== 'dtiong.todoist@gmail.com'
 
   const date = new Date(email.date).toLocaleDateString('en-AU', {
     day: 'numeric',
@@ -53,8 +55,10 @@ export default function EmailCard({
                 <span className="truncate text-xs text-gray-400">
                   {sender.email}
                 </span>
-                {isForwarded && (
-                  <span className="text-xs text-gray-300">· forwarded</span>
+                {showVia && (
+                  <span className="text-xs text-gray-300">
+                    · via {email.to?.email}
+                  </span>
                 )}
               </div>
               <p className="mt-0.5 text-sm leading-snug text-gray-700">

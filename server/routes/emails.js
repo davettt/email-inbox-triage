@@ -55,6 +55,7 @@ router.post('/fetch', async (_req, res) => {
       const newProcessed = newEmails.map((email, i) => ({
         id: email.id,
         from: email.from,
+        ...(email.to ? { to: email.to } : {}),
         ...(email.originalFrom ? { originalFrom: email.originalFrom } : {}),
         subject: email.subject,
         date: email.date,

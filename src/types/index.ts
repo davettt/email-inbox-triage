@@ -8,6 +8,7 @@ export type EmailImportance = 'action' | 'loop' | 'noise'
 export interface ProcessedEmail {
   id: string
   from: EmailSender
+  to?: EmailSender
   originalFrom?: EmailSender
   subject: string
   date: string

@@ -68,14 +68,14 @@ Or use your own `ecosystem.config.js`.
 
 ## Scripts
 
-| Command             | Description                        |
-| ------------------- | ---------------------------------- |
-| `npm run dev`       | Start dev servers (Vite + nodemon) |
-| `npm run build`     | Production build                   |
-| `npm start`         | Start Express server               |
-| `npm run auth`      | Authenticate or re-authenticate Gmail |
-| `npm run check`     | Lint + format check + type check   |
-| `npm run security`  | npm audit                          |
+| Command            | Description                           |
+| ------------------ | ------------------------------------- |
+| `npm run dev`      | Start dev servers (Vite + nodemon)    |
+| `npm run build`    | Production build                      |
+| `npm start`        | Start Express server                  |
+| `npm run auth`     | Authenticate or re-authenticate Gmail |
+| `npm run check`    | Lint + format check + type check      |
+| `npm run security` | npm audit                             |
 
 ## Data & Privacy
 
