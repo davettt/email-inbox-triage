@@ -84,6 +84,14 @@ Or use your own `ecosystem.config.js`.
 - Email metadata (sender, subject, date, and a body preview) is sent to the Anthropic API for triage classification — nothing else
 - Actions (delete, archive) are performed directly via the Gmail API — no third-party services involved
 
-## Notes
+## Personal Project Notice
 
-This is a personal productivity tool built for my own use. The code is public but this is not an open-source project accepting contributions — it's built around my specific email workflow and Gmail setup. Feel free to fork and adapt for your own needs.
+This is a personal project. While you're welcome to fork it and customize it for your own needs, I'm not accepting pull requests or feature contributions. This keeps the project simple and focused on my personal requirements.
+
+If you'd like to use this project:
+
+- ✅ **Fork it** — Make your own version
+- ✅ **Customize it** — Modify the code as needed
+- ✅ **Report bugs** — File issues for actual bugs
+- ❌ **Submit pull requests** — I won't be reviewing these
+- ❌ **Request features** — Feature requests won't be considered
