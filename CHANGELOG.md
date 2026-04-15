@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0] - 2026-04-15
+
+### Added
+
+- Stale build detection — amber banner in the UI (and server-side console warning) prompts `npm run restart:pm2` when files in `src/` or `server/` have changed since the last build
+- `GET /api/build-status` endpoint exposing build freshness
+- `.last-build` marker written by `npm run build`
+
 ## [1.1.0] - 2026-04-03
 
 ### Added

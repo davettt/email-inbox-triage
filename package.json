@@ -1,12 +1,12 @@
 {
   "name": "email-inbox",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "npm run kill-port && concurrently --kill-others-on-fail \"vite\" \"nodemon --ignore local_data/ server/index.js\"",
     "kill-port": "lsof -ti :3006 | xargs kill -9 2>/dev/null; exit 0",
-    "build": "vite build",
+    "build": "vite build && node -e \"fs.writeFileSync('.last-build',Date.now().toString())\"",
     "start": "node server/index.js",
     "restart:pm2": "npm run build && pm2 restart email-inbox",
     "auth": "node scripts/setup-gmail-auth.js",

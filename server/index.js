@@ -4,6 +4,7 @@ import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import emailsRouter from './routes/emails.js'
+import { buildStale } from './buildCheck.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const PORT = process.env.PORT ?? 3006
@@ -13,6 +14,10 @@ const app = express()
 
 app.use(cors({ origin: IS_PROD ? false : 'http://localhost:5173' }))
 app.use(express.json())
+
+app.get('/api/build-status', (_req, res) => {
+  res.json({ stale: buildStale })
+})
 
 app.use('/api/emails', emailsRouter)
 

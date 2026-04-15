@@ -71,7 +71,7 @@ Or use your own `ecosystem.config.js`.
 | Command            | Description                           |
 | ------------------ | ------------------------------------- |
 | `npm run dev`      | Start dev servers (Vite + nodemon)    |
-| `npm run build`    | Production build                      |
+| `npm run build`    | Production build (writes `.last-build` marker for stale-build detection) |
 | `npm start`        | Start Express server                  |
 | `npm run auth`     | Authenticate or re-authenticate Gmail |
 | `npm run check`    | Lint + format check + type check      |
